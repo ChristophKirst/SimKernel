@@ -44,6 +44,7 @@ ExprParser::ExprParser() : result(ExprNullPtr())
    predefineFunction<ExprReplace>      (predefined_functions);
    predefineFunction<ExprInsert>       (predefined_functions);
    predefineFunction<ExprJoin>         (predefined_functions);
+   predefineFunction<ExprLength>       (predefined_functions);
 
    predefineFunction<ExprFunction>     (predefined_functions);
    predefineFunction<ExprEvaluateAt>   (predefined_functions);

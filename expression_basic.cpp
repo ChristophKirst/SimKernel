@@ -30,6 +30,7 @@ EXPR_NAME_IMPL(ExprPrepend,      "Prepend")
 EXPR_NAME_IMPL(ExprReplace,      "Replace")
 EXPR_NAME_IMPL(ExprInsert,       "Insert")
 EXPR_NAME_IMPL(ExprJoin,         "Join")
+EXPR_NAME_IMPL(ExprLength,       "Length")
 
 EXPR_NAME_IMPL(ExprFunction,     "Function")
 EXPR_NAME_IMPL(ExprEvaluateAt,   "EvaluateAt")

@@ -85,5 +85,6 @@ Print[i-4];
 
 Print[Table[i,{i,1,5,2}]];
 
+Print[Length[{1,2,3,4}]];
 
 Print[Range[10]];
