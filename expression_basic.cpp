@@ -126,11 +126,11 @@ template<> std::string typeName<int>() { return std::string("int"); };
 
 template<> std::string typeName<long>() { return std::string("long"); };
 
-template<> std::string typeName<unsigned int>() { return std::string("uint"); };
+template<> std::string typeName<unsigned int>() { return std::string("unsigned int"); };
 
 template<> std::string typeName<short>() { return std::string("short"); };
 
-template<> std::string typeName<short unsigned int>() { return std::string("short uint"); };
+template<> std::string typeName<short unsigned int>() { return std::string("short unsigned int"); };
 
 template<> std::string typeName<std::string>() { return std::string("string"); };
 
@@ -151,7 +151,7 @@ void ExprToValue(const ExprPtrT& e, long int& val)
    val = int(*e);
 };
 
-void ExprToValue(const ExprPtrT& e, uint& val)
+void ExprToValue(const ExprPtrT& e, unsigned int& val)
 {
    if (!(e->toTypeQ(typeid(int)))) 
       throw ExpressionError(ExprToValueErrorDescription<int>(e));

@@ -23,7 +23,7 @@
 //SimControl: reset_iteration() = init_iteration()
 //            next_iteration()
 //            bool end_iteration()
-//            uint n_interations()
+//            unsigned int n_interations()
 
 //#include <iostream>
 //#define EXPR_SIM_DEBUG(s1, s2) std::cout << "ExprDebug: SIM: " << s1 << " "  << s2 << std::endl; std::cout.flush();
@@ -179,7 +179,7 @@ class ExprIterator : public Expression
       typedef std::vector<ExprPtrT> IteratorListT;
       static IteratorListT iterators;
 
-      typedef std::deque<uint> IteratorOrderT;
+      typedef std::deque<unsigned int> IteratorOrderT;
       static IteratorOrderT ordering;  // dependency ordering - most dependend is last
 
       static int count;      // actual iteration number
