@@ -3,8 +3,8 @@
 
    Christoph Kirst
    christoph@nld.ds.mpg.de 
-   Max Planck Institue for Dynamics and Self-Organisation Göttingen
-   HU Berlin, BCCN Göttingen & Berlin (2008)
+   Max Planck Institue for Dynamics and Self-Organisation GÃ¶ttingen
+   HU Berlin, BCCN GÃ¶ttingen & Berlin (2008)
 ****************************************************************************/
 #ifndef EXPRESSION_BASIC_H
 #define EXPRESSION_BASIC_H
@@ -1164,6 +1164,39 @@ class ExprJoin : public Expression
       ExprSyntaxErrorT check_syntax() const
       {
          if (nargs() != 2) return IllegalArgumentNumber;
+         else return NoSyntaxError;
+      };
+};
+
+
+class ExprLength : public Expression
+{
+   public: 
+      ExprLength() : Expression() {};
+
+      ExprLength(const ExprPtrT& l) : Expression(l) 
+      {};
+
+   public:
+      EXPR_NAME_DECL()
+
+      ExprPtrT evaluate(ExprScopeT* scope)
+      {
+         EXPR_EVAL_CHECK_SYNTAX()
+
+         ExprPtrT l = arg[0]->evaluate(scope);
+
+         if (l->listQ())
+         {
+            return ExprPtrT(new ExprInteger(l->nargs()));
+         };
+
+         return ExprPtrT(new ExprLength(l));
+      };
+
+      ExprSyntaxErrorT check_syntax() const
+      {
+         if (nargs() != 1) return IllegalArgumentNumber;
          else return NoSyntaxError;
       };
 };

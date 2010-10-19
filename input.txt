@@ -1,3 +1,7 @@
+i = Iterator[i,{i,1,10}];
+
+/*
+
 y = {sdfsdf, 6 + 5 * (a+b)};
 
 f[x_]:= x^t;
@@ -88,3 +92,11 @@ Print[Table[i,{i,1,5,2}]];
 Print[Length[{1,2,3,4}]];
 
 Print[Range[10]];
+
+
+
+k = Length[{1,2,3,4}];
+
+Print[k];
+
+*/

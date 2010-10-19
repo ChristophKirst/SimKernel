@@ -5,7 +5,7 @@
    Christoph Kirst
    christoph@nld.ds.mpg.de 
    Max Planck Institue for Dynamics and Self-Organisation
-   HU Berlin, BCCN Göttingen & Berlin (2008)
+   HU Berlin, BCCN GÃ¶ttingen & Berlin (2008)
 ***************************************************************************/
 #include "expression_parser.h"
 
@@ -44,6 +44,7 @@ ExprParser::ExprParser() : result(ExprNullPtr())
    predefineFunction<ExprReplace>      (predefined_functions);
    predefineFunction<ExprInsert>       (predefined_functions);
    predefineFunction<ExprJoin>         (predefined_functions);
+   predefineFunction<ExprLength>       (predefined_functions);
 
    predefineFunction<ExprFunction>     (predefined_functions);
    predefineFunction<ExprEvaluateAt>   (predefined_functions);
@@ -129,7 +130,7 @@ std::string ExprParser::print_error(char const* in, char const* pos)
    char const* after  = pos;
    char const* end    = pos;
    char const* it = pos;
-   uint lns = 0; uint lnscnt = 0; uint arr = 0; 
+   unsigned int lns = 0; unsigned int lnscnt = 0; unsigned int arr = 0; 
    while (it != begin)
    {
       if ( *it=='\n' ) lns++;
