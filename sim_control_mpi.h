@@ -69,7 +69,7 @@ public:
             if (!ready) err = "No input file specified!";
          };
 
-         if (ready) ready = parser.parse(argv[1], err);
+         if (ready) ready = parser.parse_file(argv[1], err);
          SCM_DEBUG("Manager: parser.result=", parser.result)
 
          if (ready) ready = sim.init(parser.result, err);
@@ -221,7 +221,7 @@ public:
 
 
          std::string err;
-         if (ready) ready = parser.parse(argv[1], err);
+         if (ready) ready = parser.parse_file(argv[1], err);
          if (ready) ready = sim.init(parser.result, err, mpi_rank);
 
          if (ready)

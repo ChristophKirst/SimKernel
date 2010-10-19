@@ -68,7 +68,7 @@ typedef long                           ExprRefT;
 typedef int                            ExprStatusT;
 
 typedef std::string                    ExprNameT;
-typedef unsigned int                           ExprIndexT;
+typedef unsigned int                   ExprIndexT;
 typedef std::deque<ExprPtrT>           ExprArgT;
 typedef ExprArgT::iterator             ExprArgIteratorT;
 typedef ExprArgT::const_iterator       ExprArgConstIteratorT;
@@ -375,7 +375,7 @@ public:
    typedef DefsT::iterator                   DefsIter;
    typedef std::deque< DefsT >               DefsStackT;
    typedef DefsStackT::iterator              DefsStackIter;
-   typedef unsigned int                              ScopeLevelT;
+   typedef unsigned int                      ScopeLevelT;
 
 public:
 

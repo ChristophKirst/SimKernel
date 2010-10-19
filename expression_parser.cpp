@@ -44,7 +44,6 @@ ExprParser::ExprParser() : result(ExprNullPtr())
    predefineFunction<ExprReplace>      (predefined_functions);
    predefineFunction<ExprInsert>       (predefined_functions);
    predefineFunction<ExprJoin>         (predefined_functions);
-   predefineFunction<ExprLength>       (predefined_functions);
 
    predefineFunction<ExprFunction>     (predefined_functions);
    predefineFunction<ExprEvaluateAt>   (predefined_functions);
@@ -130,7 +129,7 @@ std::string ExprParser::print_error(char const* in, char const* pos)
    char const* after  = pos;
    char const* end    = pos;
    char const* it = pos;
-   unsigned int lns = 0; unsigned int lnscnt = 0; unsigned int arr = 0; 
+   uint lns = 0; uint lnscnt = 0; uint arr = 0; 
    while (it != begin)
    {
       if ( *it=='\n' ) lns++;
@@ -163,8 +162,6 @@ bool ExprParser::parse_file(const char* filename, std::string& errstr)
    PARSER_DEBUG("ExprParser.parse()", "")
    PARSER_DEBUG("parse file:", filename)
 
-   std::ostringstream str;
-
    std::ifstream file(filename, std::ios::in|std::ios::binary|std::ios::ate);
    std::ifstream::pos_type size;
    char * input = 0;
@@ -183,6 +180,7 @@ bool ExprParser::parse_file(const char* filename, std::string& errstr)
    }
    else
    {
+      std::ostringstream str;
       str << "Cannot open file: " << filename << " !\n";
       errstr = str.str();
       return false;

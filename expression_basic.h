@@ -1169,39 +1169,6 @@ class ExprJoin : public Expression
 };
 
 
-class ExprLength : public Expression
-{
-   public: 
-      ExprLength() : Expression() {};
-
-      ExprLength(const ExprPtrT& l) : Expression(l) 
-      {};
-
-   public:
-      EXPR_NAME_DECL()
-
-      ExprPtrT evaluate(ExprScopeT* scope)
-      {
-         EXPR_EVAL_CHECK_SYNTAX()
-
-         ExprPtrT l = arg[0]->evaluate(scope);
-
-         if (l->listQ())
-         {
-            return ExprPtrT(new ExprInteger(l->nargs()));
-         };
-
-         return ExprPtrT(new ExprLength(l));
-      };
-
-      ExprSyntaxErrorT check_syntax() const
-      {
-         if (nargs() != 1) return IllegalArgumentNumber;
-         else return NoSyntaxError;
-      };
-};
-
-
 
 /***********************************************************************
 

@@ -3,7 +3,7 @@
 # ----------------------------------- #
 
 # single or parallel
-MPI = off
+MPI = on
 EXE = test
 
 ifeq ($(MPI), on)
@@ -16,14 +16,17 @@ CFLAGS =
 endif
 
 LDFLAGS  = -lgsl -L.
-OBJ  = main.o expression.o expression_basic.o expression_sim.o expression_extra.o expression_parser.o sim_io_manager.o sim_io.o sim_signals.o sim.o
+OBJBASE  = main.o expression.o expression_basic.o expression_sim.o expression_extra.o expression_parser.o sim_io_manager.o sim_io.o sim_signals.o sim.o
 
 EXPRH = expression.h expression_basic.h expression_sim.h expression_extra.h expression_parser.h
-SIMH =  sim.h sim_io.h sim_signals.h sim_control.h sim_io_manager.h 
+SIMHBASE =  sim.h sim_io.h sim_signals.h sim_control.h sim_io_manager.h 
 
 ifeq ($(MPI), on)
-OBJ = sim_mpi.o $(OBJ)
-SIMH = sim_mpi.h sim_control_mpi.h  $(SIMH)
+OBJ = sim_mpi.o $(OBJBASE)
+SIMH = sim_mpi.h sim_control_mpi.h  $(SIMHBASE)
+else
+OBJ = $(OBJBASE)
+SIMH = $(SIMHBASE)
 endif
 
 

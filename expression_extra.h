@@ -205,7 +205,7 @@ class ExprRandom : public Expression
       inline double random_number(const double& s, const double& e) const
       {
          //return (e-s)*gsl_rng_uniform(random) + s;
-         return ((e-s)*rand()+s)/(double) (RAND_MAX);
+         return (e-s)*(rand()/(double) (RAND_MAX)) + s;
       }
 
 
