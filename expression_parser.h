@@ -346,7 +346,7 @@ private:
    struct definition {
       rule<ScannerT> integer, real, strng, boolean, literal;
       rule<ScannerT> list, evaluation, extract, parenthesis, pattern;
-      rule<ScannerT> base, power, factor, multiplication, addition;
+      rule<ScannerT> base, at, power, factor, multiplication, addition;
       rule<ScannerT> comparison, and_expression, or_expression, expression;
       rule<ScannerT> block, global;
       rule<ScannerT> run;
@@ -421,7 +421,15 @@ private:
                 |  literal >> !pattern 
                 ) >> *(evaluation) >> *(extract);
 
-         power = base >> 
+         at = base >> 
+                  *( ( str_p("@")[NewScope<Func>(self.scope)]
+                       >> Expect_expression(at)[IncreaseArg<Func>(self.scope)]
+                                                 [CreateList<Func, ExprList>(self.stack, self.scope)]
+                                                 [CreateEvaluation(self.stack, self.predef_func)]
+                     )
+                   );
+
+         power = at >> 
                  *( ( ch_p('^') 
                       >> Expect_expression(factor)
                     )[CreateBinary<ExprPower>(self.stack)] 

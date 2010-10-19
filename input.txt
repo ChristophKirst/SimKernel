@@ -1,5 +1,8 @@
 i = Iterator[i,{i,1,10}];
 
+Print[Length @ {1,2,3,4,5}];
+
+
 /*
 
 y = {sdfsdf, 6 + 5 * (a+b)};
