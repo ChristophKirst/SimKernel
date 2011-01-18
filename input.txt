@@ -1,6 +1,8 @@
-i = Iterator[i,{i,1,10}];
+i = Iterator[i,{i,1,50}];
 
 Print[Length @ {1,2,3,4,5}];
+
+ul = 100;
 
 
 /*

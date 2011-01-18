@@ -1,4 +1,4 @@
-/***************************************************************************
+/**************************************************************************
    expression_basic.h   -  basic expressions for the parameter kernel
 
    Christoph Kirst
@@ -2493,6 +2493,7 @@ std::string ExprToValueErrorDescription(const ExprPtrT& e)
 };
 
 void ExprToValue(const ExprPtrT& e, long int& val);
+void ExprToValue(const ExprPtrT& e, unsigned long& val);
 void ExprToValue(const ExprPtrT& e, short& val);
 void ExprToValue(const ExprPtrT& e, unsigned int& val);
 void ExprToValue(const ExprPtrT& e, short unsigned int& val);

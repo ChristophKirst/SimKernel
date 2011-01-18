@@ -111,6 +111,7 @@ void SimIOManager::print_message(const std::string& tex, int id, int pr)
 
    if (file_out) of << str.str();
    if (screen_out) std::cout << str.str();
+   flush();
 };
 
 std::string SimIOManager::message_text(const std::string& tex, const SimSignal& sig)
