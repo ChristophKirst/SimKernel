@@ -1,11 +1,21 @@
-i = Iterator[i,{i,1,50}];
-
-Print[Length @ {1,2,3,4,5}];
+ii = Iterator[i,{i,1,3}];
+jj = Iterator[k,{k,1,ii}];
 
 ul = 100;
 
 
+a= 1001;
+
+
+a = Iteration[];
+b = Iterations[];
+
+Print[Iteration[]];
+
+
 /*
+
+Print[Length @ {1,2,3,4,5}];
 
 y = {sdfsdf, 6 + 5 * (a+b)};
 
@@ -43,6 +53,7 @@ Print[y];
 Print[x];
 
 Print[ToString["hallo"]];
+
 
 
 f[x_,y_]:=Sin[x] * Exp[y];

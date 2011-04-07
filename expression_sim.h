@@ -183,6 +183,7 @@ class ExprIterator : public Expression
       static IteratorOrderT ordering;  // dependency ordering - most dependend is last
 
       static int count;      // actual iteration number
+      static int n_iters;    // total number of iterations
       static int level;      // actual level for increasing the iterator
 
       ExprIndexT id; // position in IteratorList
@@ -250,13 +251,15 @@ class ExprIterator : public Expression
       {
          // assume kernel is initialized
          count = -1;
-         int n = 0;
-         while(next_iteration(scope)) {n++;};
+         n_iters = 0;
+         while(next_iteration(scope)) {n_iters++;};
          count = -1;
-         return n;
+         return n_iters;
       };
 
-      static int n_iteration() { return count; };
+      static int iteration() { return count; };
+
+      static int n_iterations() { return n_iters; }
 
       static void init(ExprScopeT* scope)
       {
@@ -354,7 +357,7 @@ class ExprIterator : public Expression
                status = Eval;
                step = arg[1]->arg[1]->evaluate(scope);
                end = arg[1]->arg[2]->evaluate(scope);
-               delta = arg[1]->arg[3]->evaluate(scope);
+               if (arg[1]->nargs() > 3) delta = arg[1]->arg[3]->evaluate(scope);
                EXPR_EVAL_ASSERT(step->numberQ() && end->numberQ() && delta->numberQ(), IteratorExpectNumber, this)
                //status = Done;
             };
@@ -373,7 +376,6 @@ class ExprIterator : public Expression
       ExprPtrT evaluate(ExprScopeT* scope)
       {
          EXPR_SIM_DEBUG("Iterator: evaluate: status=", int(status))
-
          EXPR_EVAL_ASSERT(status != Eval, IteratorLoop, this)
 
          // the iteration value 
@@ -399,12 +401,14 @@ class ExprIterator : public Expression
                end = arg[1]->arg[2]->evaluate(scope);
                delta = ExprPtrT(new ExprInteger(1));
                if (arg[1]->nargs()>3) delta = arg[1]->arg[3]->evaluate(scope);
+
                EXPR_EVAL_ASSERT(step->numberQ() && end->numberQ() && delta->numberQ(), IteratorExpectNumber, this)
                scope->push();
                scope->define_local(arg[1]->arg[0]->symbolname(), step);
                value = arg[0]->evaluate(scope);
                scope->pop();
                status = Defd;
+
             };
 
             // automatic dependency ordering
@@ -412,7 +416,7 @@ class ExprIterator : public Expression
         };
 
          // Iteration initialization evaluation call after initializing
-         if (status = Defd) return value;
+         if (status == Defd) {return value;}
 
          EXPR_EVAL_ASSERT(false, IteratorInternalError, this)
          return ExprNullPtr();
@@ -433,6 +437,107 @@ class ExprIterator : public Expression
 };
 
 
+
+
+class ExprIteratorCount : public Expression
+{
+public: 
+   ExprIteratorCount() : Expression() {};
+
+public:
+   EXPR_NAME_DECL()
+
+   ExprPtrT evaluate(ExprScopeT* scope)
+   {
+      EXPR_EVAL_CHECK_SYNTAX()
+      return ExprPtrT(this);
+      //return ExprPtrT(new ExprInteger(ExprIterator::count));
+   };
+
+   ExprSyntaxErrorT check_syntax() const
+   {
+      if (nargs() != 0) return IllegalArgumentNumber;
+      else return NoSyntaxError;
+   };
+
+   bool toTypeQ(const std::type_info& ti) const 
+   { 
+      return (  
+      ti == typeid(int) 
+      || ti == typeid(double) 
+      || ti == typeid(bool)
+      );
+   };
+   
+   operator double () const 
+   {
+      return double(ExprIterator::count);
+   };
+   
+   operator int () const
+   {
+      return int(ExprIterator::count);
+   };
+   
+   operator bool () const
+   {
+      return (ExprIterator::count > 0);
+   };
+   
+   bool numberQ()  { return true; };
+   bool integerQ() { return true; };
+};
+
+
+class ExprIteratorTotal : public Expression
+{
+public: 
+   ExprIteratorTotal() : Expression() {};
+
+public:
+   EXPR_NAME_DECL()
+
+   ExprPtrT evaluate(ExprScopeT* scope)
+   {
+      EXPR_EVAL_CHECK_SYNTAX()
+      return ExprPtrT(this);
+      //if (ExprIterator::n_iters<0) return ExprPtrT(this);
+      //return ExprPtrT(new ExprInteger(ExprIterator::n_iters));
+   };
+
+   ExprSyntaxErrorT check_syntax() const
+   {
+      if (nargs() != 0) return IllegalArgumentNumber;
+      else return NoSyntaxError;
+   };
+   
+   bool toTypeQ(const std::type_info& ti) const 
+   { 
+      return (  
+         ti == typeid(int) 
+      || ti == typeid(double) 
+      || ti == typeid(bool)
+      );
+   };
+   
+   operator double () const 
+   {
+      return double(ExprIterator::n_iters);
+   };
+   
+   operator int () const
+   {
+      return int(ExprIterator::n_iters);
+   };
+   
+   operator bool () const
+   {
+      return (ExprIterator::n_iters > 0);
+   };
+   
+   bool numberQ()  { return true; };
+   bool integerQ() { return true; };
+};
 
 
 

@@ -10,11 +10,11 @@
 #include "expression_parser.h"
 
 // Boost Includes:
-#include <boost/spirit/core.hpp>
-#include <boost/spirit/utility.hpp>
-#include <boost/spirit/tree/ast.hpp>
-#include <boost/spirit/symbols/symbols.hpp>
-#include <boost/spirit/error_handling/exceptions.hpp>
+#include <boost/spirit/include/classic_core.hpp>
+#include <boost/spirit/include/classic_utility.hpp>
+#include <boost/spirit/include/classic_ast.hpp>
+#include <boost/spirit/include/classic_symbols.hpp>
+#include <boost/spirit/include/classic_exceptions.hpp>
 //#define BOOST_SPIRIT_DEBUG
 
 // Standard Includes:
@@ -27,7 +27,7 @@
 #include <fstream>
 
 using namespace std;
-using namespace boost::spirit;
+using namespace boost::spirit::classic;
 using namespace boost;
 
 ExprParser::ExprParser() : result(ExprNullPtr())
@@ -90,6 +90,8 @@ ExprParser::ExprParser() : result(ExprNullPtr())
    predefineFunction<ExprPrint>        (predefined_functions);
 
    predefineFunction<ExprIterator>     (predefined_functions);
+   predefineFunction<ExprIteratorCount>(predefined_functions);
+   predefineFunction<ExprIteratorTotal>(predefined_functions);
    predefineFunction<ExprCreator>      (predefined_functions);
 
    predefineFunction<ExprImport>       (predefined_functions);
@@ -205,7 +207,7 @@ bool ExprParser::parse(const char* input, const char* last, std::string& errstr)
    parse_info<> pinfo; 
 
    try {
-      pinfo = boost::spirit::parse(input, last, sim_grammar, comment_grammar);
+      pinfo = boost::spirit::classic::parse(input, last, sim_grammar, comment_grammar);
    } catch (parser_error<ExprParser::ParseError, char const*>& e) {
       std::map<ParseError, std::string>  errmsg;
       errmsg[ExpectExpression]     = "an expression";

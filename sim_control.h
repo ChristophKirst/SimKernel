@@ -138,21 +138,34 @@ public:
       std::string cmd;
       err = "";
       cout << "In["<<in<<"]:";
-      cin >> cmd;
+      //cin >> cmd;
+      getline(cin, cmd);
       while (cmd != "Quit[]" && cmd != "q")
       {
-         if (!parser.parse(cmd.c_str(), err))
+         if (!parser.parse(cmd, err))
          {
             io.message("Cannot parse command: " + cmd);
             io.message(err);
             err = "";
          } else {
             ExprPtrT res, resprt;
-//cout << parser.result << std::endl;
+            //cout << parser.result << std::endl;
+            
+            resprt = new ExprBlock();
+            resprt->arg = parser.result->arg;
+            cout << "Parse[" <<in <<"]:" << resprt << std::endl;           
+ 
+            cout << "Out["<<in<<"]:"; // for intermediate ouputs such as Print etc
             try {
-               resprt = ExprPtrT(new ExprPrint(parser.result->arg[0]));
-               cout << "Out["<<in<<"]:";
-               res = resprt->evaluate(&sim.scope);
+               ExprArgT::iterator it = resprt->arg.begin();
+               while (it != resprt->arg.end() )
+               {
+                  res = it->get()->evaluate(&sim.scope);
+                  it++;
+               };
+               // make global header to block
+               //cout << parser.result << std::endl;
+               //res = resprt->evaluate(&sim.scope);
             }
             catch (const SimSignal& e)
             {
@@ -166,11 +179,11 @@ public:
                      cmd = ""; break;
                }
             }
-            cout << "Result["<<in<<"]:" << res << std::endl;
+            cout << std::endl << "Result["<<in<<"]:" << res << std::endl;
          }
          in++;
          cout << "In["<<in<<"]:";
-         cin >> cmd;
+         getline(cin, cmd);
       }; // while 
 
       io.message("Bye!");

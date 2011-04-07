@@ -3,7 +3,7 @@
 # ----------------------------------- #
 
 # single or parallel
-MPI = on
+MPI = off
 EXE = test
 
 ifeq ($(MPI), on)
@@ -15,7 +15,7 @@ CFLAGS =
 # -O2 
 endif
 
-LDFLAGS  = -lgsl -L.
+LDFLAGS  = -lgsl -lgslcblas -L.
 OBJBASE  = main.o expression.o expression_basic.o expression_sim.o expression_extra.o expression_parser.o sim_io_manager.o sim_io.o sim_signals.o sim.o
 
 EXPRH = expression.h expression_basic.h expression_sim.h expression_extra.h expression_parser.h

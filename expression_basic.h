@@ -9,6 +9,7 @@
 #ifndef EXPRESSION_BASIC_H
 #define EXPRESSION_BASIC_H
 
+#include <cstdlib>
 #include <string>
 #include <sstream>
 #include <math.h>
@@ -1485,6 +1486,7 @@ class ExprCodeActionT
 
 
 // expr1; expr2; ... exprn;
+// in Mathematic = CompundExpression != Block so be careful here !!
 class ExprBlock : public Expression
 {
    public: 
@@ -1550,7 +1552,7 @@ class ExprGlobal : public Expression
          catch (const ExprCodeActionT<Break>& ca) 
          {
             EXPR_EVAL_ASSERT(false, BreakToGlobal, this)
-         };;
+         }
          return ExprNullPtr();
       };
 
