@@ -10,11 +10,25 @@
 #define EXPRESSION_PARSER_H
 
 // Boost Includes:
+#include <boost/version.hpp>
+
+#if BOOST_VERSION >= 104400
 #include <boost/spirit/include/classic_core.hpp>
 #include <boost/spirit/include/classic_utility.hpp>
 #include <boost/spirit/include/classic_ast.hpp>
 #include <boost/spirit/include/classic_symbols.hpp>
 #include <boost/spirit/include/classic_exceptions.hpp>
+using namespace boost::spirit::classic;
+
+#else
+
+#include <boost/spirit/core.hpp>
+#include <boost/spirit/utility.hpp>
+#include <boost/spirit/tree/ast.hpp>
+#include <boost/spirit/symbols/symbols.hpp>
+#include <boost/spirit/error_handling/exceptions.hpp>
+using namespace boost::spirit;
+#endif
 
 // Standard Includes:
 #include <string>                             // string, getline
@@ -33,8 +47,8 @@
 
 
 using namespace std;
-using namespace boost::spirit::classic;
-//using namespace boost;
+// using namespace boost::spirit::classic;
+// using namespace boost;
 
 typedef ExprNameT NameT;
 

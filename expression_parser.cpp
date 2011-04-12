@@ -9,14 +9,6 @@
 ***************************************************************************/
 #include "expression_parser.h"
 
-// Boost Includes:
-#include <boost/spirit/include/classic_core.hpp>
-#include <boost/spirit/include/classic_utility.hpp>
-#include <boost/spirit/include/classic_ast.hpp>
-#include <boost/spirit/include/classic_symbols.hpp>
-#include <boost/spirit/include/classic_exceptions.hpp>
-//#define BOOST_SPIRIT_DEBUG
-
 // Standard Includes:
 #include <string>                             // string, getline
 #include <iostream>                           // cout, cerr
@@ -25,10 +17,6 @@
 #include <map>                                // map
 #include <vector>
 #include <fstream>
-
-using namespace std;
-using namespace boost::spirit::classic;
-using namespace boost;
 
 ExprParser::ExprParser() : result(ExprNullPtr())
 {
@@ -207,7 +195,11 @@ bool ExprParser::parse(const char* input, const char* last, std::string& errstr)
    parse_info<> pinfo; 
 
    try {
+#if BOOST_VERSION >= 104400
       pinfo = boost::spirit::classic::parse(input, last, sim_grammar, comment_grammar);
+#else
+      pinfo = boost::spirit::parse(input, last, sim_grammar, comment_grammar);
+#endif
    } catch (parser_error<ExprParser::ParseError, char const*>& e) {
       std::map<ParseError, std::string>  errmsg;
       errmsg[ExpectExpression]     = "an expression";
