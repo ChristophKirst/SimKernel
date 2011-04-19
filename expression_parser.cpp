@@ -78,7 +78,7 @@ ExprParser::ExprParser() : result(ExprNullPtr())
    predefineFunction<ExprPrint>        (predefined_functions);
 
    predefineFunction<ExprIterator>     (predefined_functions);
-   predefineFunction<ExprIteratorCount>(predefined_functions);
+   predefineFunction<ExprIteratorIter> (predefined_functions);
    predefineFunction<ExprIteratorTotal>(predefined_functions);
    predefineFunction<ExprCreator>      (predefined_functions);
 

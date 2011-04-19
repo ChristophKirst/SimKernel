@@ -10,7 +10,7 @@ a= 1001;
 a = Iteration[];
 b = Iterations[];
 
-Print[Iteration[]];
+ss = ToString[Iteration[]];
 
 
 /*

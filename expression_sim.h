@@ -185,6 +185,8 @@ class ExprIterator : public Expression
       static int count;      // actual iteration number
       static int n_iters;    // total number of iterations
       static int level;      // actual level for increasing the iterator
+      
+      static enum IteratorCounterStatusT {CNdef = 0, CDefd} counter_status;  // n_iters defined
 
       ExprIndexT id; // position in IteratorList
 
@@ -253,6 +255,7 @@ class ExprIterator : public Expression
          count = -1;
          n_iters = 0;
          while(next_iteration(scope)) {n_iters++;};
+         counter_status = CDefd;
          count = -1;
          return n_iters;
       };
@@ -282,6 +285,7 @@ class ExprIterator : public Expression
             EXPR_EVAL_ASSERT(((ExprIterator*)(*i).get())->status == Defd, IteratorInternalError, (*i))
             ((ExprIterator*)(*i).get())->status = Done;
          };
+         //iter_status = CDefd;
       };
 
       static bool next_iteration(ExprScopeT* scope)
@@ -439,10 +443,10 @@ class ExprIterator : public Expression
 
 
 
-class ExprIteratorCount : public Expression
+class ExprIteratorIter : public Expression
 {
 public: 
-   ExprIteratorCount() : Expression() {};
+   ExprIteratorIter() : Expression() {};
 
 public:
    EXPR_NAME_DECL()
@@ -450,42 +454,18 @@ public:
    ExprPtrT evaluate(ExprScopeT* scope)
    {
       EXPR_EVAL_CHECK_SYNTAX()
-      return ExprPtrT(this);
-      //return ExprPtrT(new ExprInteger(ExprIterator::count));
+      if (ExprIterator::counter_status == ExprIterator::CDefd) {
+         return ExprPtrT(new ExprInteger(ExprIterator::count));
+      } else {
+         return ExprPtrT(this);
+      }
    };
 
    ExprSyntaxErrorT check_syntax() const
    {
       if (nargs() != 0) return IllegalArgumentNumber;
       else return NoSyntaxError;
-   };
-
-   bool toTypeQ(const std::type_info& ti) const 
-   { 
-      return (  
-      ti == typeid(int) 
-      || ti == typeid(double) 
-      || ti == typeid(bool)
-      );
-   };
-   
-   operator double () const 
-   {
-      return double(ExprIterator::count);
-   };
-   
-   operator int () const
-   {
-      return int(ExprIterator::count);
-   };
-   
-   operator bool () const
-   {
-      return (ExprIterator::count > 0);
-   };
-   
-   bool numberQ()  { return true; };
-   bool integerQ() { return true; };
+   }
 };
 
 
@@ -500,43 +480,20 @@ public:
    ExprPtrT evaluate(ExprScopeT* scope)
    {
       EXPR_EVAL_CHECK_SYNTAX()
-      return ExprPtrT(this);
+      if (ExprIterator::counter_status == ExprIterator::CDefd) {
+         return ExprPtrT(new ExprInteger(ExprIterator::n_iters));
+      } else {
+         return ExprPtrT(this);
+      }
       //if (ExprIterator::n_iters<0) return ExprPtrT(this);
       //return ExprPtrT(new ExprInteger(ExprIterator::n_iters));
-   };
+   }
 
    ExprSyntaxErrorT check_syntax() const
    {
       if (nargs() != 0) return IllegalArgumentNumber;
       else return NoSyntaxError;
-   };
-   
-   bool toTypeQ(const std::type_info& ti) const 
-   { 
-      return (  
-         ti == typeid(int) 
-      || ti == typeid(double) 
-      || ti == typeid(bool)
-      );
-   };
-   
-   operator double () const 
-   {
-      return double(ExprIterator::n_iters);
-   };
-   
-   operator int () const
-   {
-      return int(ExprIterator::n_iters);
-   };
-   
-   operator bool () const
-   {
-      return (ExprIterator::n_iters > 0);
-   };
-   
-   bool numberQ()  { return true; };
-   bool integerQ() { return true; };
+   }
 };
 
 

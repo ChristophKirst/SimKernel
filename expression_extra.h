@@ -268,8 +268,7 @@ class ExprToString : public Expression
       {
          EXPR_EVAL_CHECK_SYNTAX()
 
-         ExprPtrT str = arg[0]->evaluate(scope);
-
+         ExprPtrT str = arg[0]->evaluate(scope);         
          if (str->stringQ()) return str;
          if (str->atomQ()) return ExprPtrT(new ExprString(str->print()));
          return ExprPtrT(new ExprToString(str));

@@ -9,7 +9,7 @@
 #include "expression_sim.h"
 
 EXPR_NAME_IMPL(ExprIterator,             "Iterator")
-EXPR_NAME_IMPL(ExprIteratorCount,        "Iteration")
+EXPR_NAME_IMPL(ExprIteratorIter,         "Iteration")
 EXPR_NAME_IMPL(ExprIteratorTotal,        "Iterations")
 EXPR_NAME_IMPL(ExprCreator,              "Creator")
 
@@ -17,6 +17,8 @@ EXPR_NAME_IMPL(ExprCreator,              "Creator")
 int ExprIterator::level(-1);
 int ExprIterator::count(-1);
 int ExprIterator::n_iters(-1);
+
+ExprIterator::IteratorCounterStatusT ExprIterator::counter_status(ExprIterator::CNdef);
 
 ExprIterator::IteratorListT ExprIterator::iterators;
 ExprIterator::IteratorOrderT ExprIterator::ordering; 
