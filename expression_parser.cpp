@@ -85,6 +85,7 @@ ExprParser::ExprParser() : result(ExprNullPtr())
    predefineFunction<ExprImport>       (predefined_functions);
    predefineFunction<ExprToString>     (predefined_functions);
 
+   predefineFunction<ExprRandomInteger>(predefined_functions);
    predefineFunction<ExprRandom>       (predefined_functions);
    predefineFunction<ExprSeed>         (predefined_functions);
 
@@ -176,7 +177,9 @@ bool ExprParser::parse_file(const char* filename, std::string& errstr)
       errstr = str.str();
       return false;
    }
-   return parse(input, last, errstr);
+   bool result = parse(input, last, errstr);
+   delete [] input;
+   return result;
 }
 
 bool ExprParser::parse(const std::string& str, std::string& errstr)

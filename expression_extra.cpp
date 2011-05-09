@@ -12,6 +12,7 @@ EXPR_NAME_IMPL(ExprImport, "Import")
 EXPR_NAME_IMPL(ExprToString, "ToString")
 
 EXPR_NAME_IMPL(ExprRandom, "Random")
+EXPR_NAME_IMPL(ExprRandomInteger, "RandomInteger")
 EXPR_NAME_IMPL(ExprSeed,   "Seed")
 
 EXPR_NAME_IMPL(ExprRange,   "Range")

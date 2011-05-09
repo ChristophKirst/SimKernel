@@ -128,6 +128,91 @@ class ExprImport : public Expression
     Random Numbers 
 
 ************************************************************************/
+
+//RandomInteger[], RandomInteger[s,e]
+
+class ExprRandomInteger : public Expression
+{
+public: 
+   ExprRandomInteger() : Expression() {};
+   
+   ExprRandomInteger(const ExprPtrT& s, const ExprPtrT& e) : Expression(s,e)
+   {};
+   
+public: 
+   EXPR_NAME_DECL()
+   
+   ExprPtrT evaluate(ExprScopeT* scope)
+   {
+      EXPR_EVAL_CHECK_SYNTAX()
+      
+      if (nargs() == 2)
+      {
+         ExprPtrT s = arg[0]->evaluate(scope);
+         ExprPtrT e = arg[1]->evaluate(scope);
+         if (s->numberQ() && e->numberQ())
+         {
+            double ds = double(*s);
+            double de = double(*e);
+            return ExprPtrT(new ExprInteger(random_number(ds, de)));
+         };
+         if (s == arg[0] && e == arg[1]) return ExprPtrT(this);
+         return ExprPtrT(new ExprRandomInteger(s,e));
+      }
+      
+      return ExprPtrT(new ExprInteger(int(rand())));
+   };
+   
+   bool toTypeQ(const std::type_info& ti) const 
+   { 
+      return (  ti == typeid(int) 
+      || ti == typeid(double) 
+      || ti == typeid(bool)
+      );
+   };
+   
+   operator double () const 
+   {
+      return int(*this);
+   };
+   
+   operator int () const
+   {
+      if (nargs() == 0) return rand();
+      EXPR_EVAL_ASSERT( arg[0]->numberQ() && arg[1]->numberQ(), RandomToNumber, this)
+      double s = double(*arg[0]);
+      double e = double(*arg[1]);
+      return random_number(s,e);
+      
+      //is this necessary ?
+   };
+
+   operator bool () const
+   {
+      return true;
+   };
+   
+   bool numberQ() { return true; };
+   bool integerQ(){ return true; };
+   bool realQ()   { return true; };
+   
+   ExprSyntaxErrorT check_syntax() const
+   {
+      if (nargs() != 0 && nargs() != 2) return IllegalArgumentNumber;
+      else return NoSyntaxError;
+   };
+   
+   inline int random_number(const double& s, const double& e) const
+   {
+      //return (e-s)*gsl_rng_uniform(random) + s;
+      return int((e-s)*(rand()/(double) (RAND_MAX)) + s);
+   }
+   
+   
+};
+
+
+
 // Random[], Random[s,e]
 
 class ExprRandom : public Expression
