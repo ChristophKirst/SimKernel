@@ -69,46 +69,66 @@ public:
       };
 
       io.set_iterations(sim.n_iterations());
+      
+      long itstart = 0;
+      long itend = sim.n_iterations();
+      if (argc==3) 
+      {
+         std::stringstream str(argv[2]);
+         str >> itstart;
+         itend = itstart;
+      };
+      if (argc==4) 
+      {
+         std::stringstream strs(argv[2]);
+         strs >> itstart;
+         std::stringstream stre(argv[3]);
+         stre >> itend;
+         if (itend<0) itend = sim.n_iterations();
+      };
+
 
       SimSignal reterr = Success;
 
       while (sim.next_iteration())
       {
-         try {
-            std::stringstream str;
-            str << "Starting Simulation iteration: " << (sim.iteration());
-            str << "/" << sim.n_iterations() << std::endl;
-            io.message(str.str());
-   
-            KernelT kernel;
-   
-            kernel.initialize(sim);
-            kernel.execute(sim);
-            kernel.finalize(sim);
+         if (itstart <= sim.iteration() && sim.iteration() <= itend) {
+            try {
+               std::stringstream str;
+               str << "Starting Simulation iteration: " << (sim.iteration());
+               str << "/" << sim.n_iterations() << std::endl;
+               io.message(str.str());
+      
+               KernelT kernel;
+      
+               kernel.initialize(sim);
+               kernel.execute(sim);
+               kernel.finalize(sim);
 
-            std::stringstream str2;
-            str2 << "Simulation iteration: " << (sim.iteration());
-            str2 << "/" << sim.n_iterations() << " done!" << std::endl;
-            io.message(str2.str());
-         }
-         catch (const SimSignal& e)
-         {
-            SIM_DEBUG("catch sig=", e)
-            switch (e)
+               std::stringstream str2;
+               str2 << "Simulation iteration: " << (sim.iteration());
+               str2 << "/" << sim.n_iterations() << " done!" << std::endl;
+               io.message(str2.str());
+            }
+            catch (const SimSignal& e)
             {
-               case Abort:
-                  io.message("Simulation run aborted due to error!");
-                  reterr = Abort;
-                  break;
-               case Exit:
-               default:
-                  io.message("Simulation aborted due to fatal error!");
-                  io.summary();
-                  io.close();
-                  return int(Exit);
-            };
-         };
-      }; // while
+               SIM_DEBUG("catch sig=", e)
+               switch (e)
+               {
+                  case Abort:
+                     io.message("Simulation run aborted due to error!");
+                     reterr = Abort;
+                     break;
+                  case Exit:
+                  default:
+                     io.message("Simulation aborted due to fatal error!");
+                     io.summary();
+                     io.close();
+                     return int(Exit);
+               }
+            }
+         } // check for iteration range 
+      } // while
 
       io.message("Simulation done!\n");
       io.error_summary();
