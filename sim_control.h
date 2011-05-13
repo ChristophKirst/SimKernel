@@ -93,6 +93,11 @@ public:
          if (itend<0) itend = sim.n_iterations()+1+itend;
       }
 
+      if (itstart <= 0 || itstart > sim.n_iterations() || itend<=0 || itend > sim.n_iterations()) {
+         io.message("Invalid Iteration number!");
+         io.close();
+         return int(Exit);
+      }
 
       SimSignal reterr = Success;
 
