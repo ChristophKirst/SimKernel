@@ -10,6 +10,7 @@
 #define SIM_CONTROL_H
 
 #include <sstream>
+#include <string.h>
 
 #include "expression_parser.h"
 #include "sim_io_manager.h"
@@ -69,23 +70,28 @@ public:
       };
 
       io.set_iterations(sim.n_iterations());
-      
+
       long itstart = 0;
       long itend = sim.n_iterations();
       if (argc==3) 
       {
-         std::stringstream str(argv[2]);
-         str >> itstart;
-         itend = itstart;
-      };
+         if (strcmp(argv[2], "iterations")==0) {  // return number of iterations to stdout
+            std::cout << sim.n_iterations() << std::endl;
+            return int(Success);
+         } else {
+            std::stringstream str(argv[2]);
+            str >> itstart;
+            itend = itstart;
+         }
+      }
       if (argc==4) 
       {
          std::stringstream strs(argv[2]);
          strs >> itstart;
          std::stringstream stre(argv[3]);
          stre >> itend;
-         if (itend<0) itend = sim.n_iterations();
-      };
+         if (itend<0) itend = sim.n_iterations()+1+itend;
+      }
 
 
       SimSignal reterr = Success;
