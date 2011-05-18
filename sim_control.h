@@ -73,7 +73,6 @@ public:
 
       long itstart = 1;
       long itend = sim.n_iterations();
-      std::cout <<"argc = "<<argc<<std::endl;
       if (argc==3) 
       {
          if (strcmp(argv[2], "iterations")==0) {  // return number of iterations to stdout
