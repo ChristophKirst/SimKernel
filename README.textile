@@ -1,0 +1,12 @@
+h1. SimKernel
+
+SimKernel controls parameter scans and iterations for any given C++ code / scientific simulation. Parameters, iteration ranges, settings and dependencies are specified in Mathematica syntax. Parallel processing of parameter scanning via MPI.
+
+* poweful control for parameter scans of scientific software
+* works with any c++ program in 1min
+* matheamtica syntax input & manipulation of parameter lists
+* mpi parrallel version
+* nested iterations - e.g. exploit symmetries in parameter space
+* handels any parameter dependencies during iteration 
+* function / module definitions possible in input file
+* to come: result dependent parameter selection
