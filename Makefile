@@ -16,7 +16,7 @@ CFLAGS =
 endif
 
 LDFLAGS  = -lgsl -lgslcblas -L.
-OBJBASE  = main.o expression.o expression_basic.o expression_sim.o expression_extra.o expression_parser.o sim_io_manager.o sim_io.o sim_signals.o sim.o
+OBJBASE  = expression.o expression_basic.o expression_sim.o expression_extra.o expression_parser.o sim_io_manager.o sim_io.o sim_signals.o sim.o
 
 EXPRH = expression.h expression_basic.h expression_sim.h expression_extra.h expression_parser.h
 SIMHBASE =  sim.h sim_io.h sim_signals.h sim_control.h sim_io_manager.h 
@@ -45,6 +45,9 @@ sim_mpi.o : sim_mpi.cpp sim_mpi.h
 sim_signals.o : sim_signals.cpp sim_signals.h
 sim_io_manager.o : sim_io_manager.cpp sim_io_manager.h sim_signals.h
 
+tutorial_sim: $(OBJBASE) tutorial/hello_world_sim.cpp
+	$(CC) $(CFLAGS) tutorial/hello_world_sim.cpp $(OBJBASE) -o tutorial_sim $(LDFLAGS)
+
 expression.o : expression.cpp expression.h
 expression_basic.o : expression_basic.cpp expression_basic.h expression.h
 expression_sim.o : expression_sim.cpp expression_sim.h expression.h expression_basic.h 
@@ -53,5 +56,5 @@ expression_parser.o : expression_parser.cpp expression_parser.h expression.h exp
 
 
 clean:
-	rm -f test *.o *~
+	rm -f test tutorial_sim *.o *~
 
