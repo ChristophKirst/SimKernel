@@ -7,7 +7,7 @@ Features:
 * Powerful control for parameter scans of scientific software
 * Works with any C++ program in minutes
 * Mathematica syntax input & manipulation of parameter lists
-* MPI parrallel version
+* MPI parallel version
 * Nested iterations - exploit symmetries in parameter space
 * Handles any parameter dependencies during iteration 
 * Function / module definitions possible in input file
@@ -113,7 +113,7 @@ name = people[[whichone]];
 
 That's it! Now if we run `./tutorial_sim tutorial/control_file.txt`, we get the following result:
 
-```c++
+```
 Sim: Starting Simulation iteration: 1/3
 Hello Alice!
 Sim: Simulation iteration: 1/3 done!
