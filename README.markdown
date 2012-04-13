@@ -100,6 +100,8 @@ public:
 };
 ```
 
+Note: The third parameter of `sim.get`, where we supply default values in case a variable is not listed in the respective control file. If we do not supply a default value and the variable is not found in the control file, the program will exit with an error message.
+
 Then, we add a control file that list several names, and define an iterator. Each value of this iterator corresponds to an iteration of our main SimKernel program. For each iteration, `greeting` and `name` are read in from the control file.
 
 ```c++
@@ -130,4 +132,8 @@ Sim: No errors!
 Sim: Bye!
 ```
 
-We believe you can see where this is going. If you have ever worked with simulations or any other program that has lots of parameters, especially if you have ever worked with more . Just paste the code you originally had into the `execute` method. Then use the medod `intialize` to load parameters from the control file, and use `finalize` to save results or to deallocate memory.
+We believe you can see where this is going. Just paste the code you originally had into the `execute` method. Then use the medod `intialize` to load parameters from the control file, and use `finalize` to save results or to deallocate memory.
+
+If you have ever worked with simulations or any other program that has lots of parameters, is is enough to keep track of your control files to remember or repeat what you have been doing.
+
+If you have any questions, feature requests or bug reports, feel free to use the Issues tab above.
