@@ -1,0 +1,6 @@
+greeting = "Hello";
+
+people = {"Alice", "Bob", "Peter"};
+
+whichone = Iterator[j,{j,0,Length[people]-1,1}];
+name = people[[whichone]];
