@@ -48,6 +48,9 @@ sim_io_manager.o : sim_io_manager.cpp sim_io_manager.h sim_signals.h
 tutorial_sim: $(OBJBASE) tutorial/hello_world_sim.cpp
 	$(CC) $(CFLAGS) tutorial/hello_world_sim.cpp $(OBJBASE) -o tutorial_sim $(LDFLAGS)
 
+tutorial_sim_iterated: $(OBJBASE) tutorial/hello_world_sim_iterated.cpp
+	$(CC) $(CFLAGS) tutorial/hello_world_sim_iterated.cpp $(OBJBASE) -o tutorial_sim_iterated $(LDFLAGS)
+
 expression.o : expression.cpp expression.h
 expression_basic.o : expression_basic.cpp expression_basic.h expression.h
 expression_sim.o : expression_sim.cpp expression_sim.h expression.h expression_basic.h 
@@ -56,5 +59,5 @@ expression_parser.o : expression_parser.cpp expression_parser.h expression.h exp
 
 
 clean:
-	rm -f test tutorial_sim *.o *~
+	rm -f test tutorial_sim tutorial_sim_iterated *.o *~
 
