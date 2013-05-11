@@ -38,7 +38,7 @@ bool Sim::get(const ExprNameT& n, T& dest, const D& def, const SimSignal& sig)
    ExprPtrT e; bool eo;
    if (!get_expr_nothrow(n, e, sig, eo))
    {
-      if (eo) err << " Using " << toExprString(def) << " instead!" << sig;
+      if (eo) err << " Using " << toExprString(def) << " instead." << sig;
       dest = def;
       return false;
    };
@@ -49,7 +49,7 @@ bool Sim::get(const ExprNameT& n, T& dest, const D& def, const SimSignal& sig)
    }
    catch (const ExpressionError& exprerr)
    {
-      if (eo) err << exprerr.what() << " Using " << toExprString(def) << " instead!" << sig;
+      if (eo) err << exprerr.what() << " Using " << toExprString(def) << " instead." << sig;
       dest = T(def);
       return false;
    };
