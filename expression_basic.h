@@ -2468,6 +2468,7 @@ std::string toExprString(const T& val)
 };
 std::string toExprString(const std::string& val);
 std::string toExprString(const char* val);
+std::string toExprString(const bool& val);
 
 template<typename T> ExprPtrT 
 ValueToExpr(const T& val)
