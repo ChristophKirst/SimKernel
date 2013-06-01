@@ -2490,7 +2490,7 @@ template<typename T>
 std::string ExprToValueErrorDescription(const ExprPtrT& e)
 {
    std::ostringstream str; 
-   str << "Expression Error: Typemismatch:\nCannot convert: " << e;
+   str << "Expression Error: Type mismatch:\nCannot convert: " << e;
    str << " to type " << typeName<T>();
    return str.str();
 };
