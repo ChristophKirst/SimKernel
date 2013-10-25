@@ -236,7 +236,7 @@ bool Sim::get_expr_nothrow(const ExprNameT& n, ExprPtrT& e, const SimSignal& sig
       e = scope.match(n);
       if (e == ExprNoMatchPtr())
       {
-         if (eo) err << "Cannot get value for " << n << "! Not Defined!";
+         if (eo) err << "Cannot get value for " << n << ".";
          e = ExprNullPtr();
          return false; 
       }

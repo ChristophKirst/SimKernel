@@ -118,6 +118,11 @@ std::string toExprString(const std::string& c)
    return std::string("\"") + c + "\"";
 };
 
+std::string toExprString(const bool& val)
+{
+  return (val ? std::string("True") : std::string("False"));
+};
+
 template<> std::string typeName<double>() { return std::string("double"); };
 
 template<> std::string typeName<const char*>() { return std::string("const char*"); };
