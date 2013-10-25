@@ -156,6 +156,7 @@ class ExprCreator : public Expression
             };
             return ExprNullPtr();
          };
+         return ExprNullPtr();
       };
 
       ExprSyntaxErrorT check_syntax() const
