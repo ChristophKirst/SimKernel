@@ -1,0 +1,146 @@
+Seed[134];
+
+i[x_]:=If[x<0, -1, 1];
+
+Print[i[10]];
+Print[i[-1]];
+
+
+d= Iterator[{-10,-100}];
+
+a = i[d];
+
+
+//a = 3.3450000000000005e-15;
+
+/*
+kk= Iterator[i,{i, 1,20}];
+ss = Iterator[l,{l,1,5}];
+*/
+
+/*
+   Print[RandomInteger[]];
+For[i=1, i<500, i=i+1,
+   Print[RandomInteger[0,101]];
+];
+*/
+/*
+ii = Iterator[i,{i,1,3}];
+jj = Iterator[k,{k,1,ii}];
+
+
+ul = 100;
+
+
+a= 1001;
+
+
+a = Iteration[];
+b = Iterations[];
+
+ss = ToString[Iteration[]];
+*/
+
+/*
+
+Print[Length @ {1,2,3,4,5}];
+
+y = {sdfsdf, 6 + 5 * (a+b)};
+
+f[x_]:= x^t;
+//t = Iterator[i,{i,2,p,1}];
+//p = Iterator[{3,4,5,8}];
+//c = Creator[f[i],{i,1,5,1}];
+
+Print[2*5];
+
+
+Seed[123698];
+r := Random[5, 10.9];
+
+//par1 = Iterator[{"Hello World", 4.6, 100}];
+
+list ={0,1,2,3,4,"falscher eintrag", 6, 7, 4.7};
+matrix = {{1,3,7},{1,2,3, 7, 8}};
+a=5;
+b=f[a];
+
+
+params = Import["test.tsv"];
+Print[params];
+
+
+l = {1,2,3,4};
+le = l[[1]];
+Print[l[[1]]];
+
+y = 100.678;
+x = ToString[y];
+
+Print[y];
+Print[x];
+
+Print[ToString["hallo"]];
+
+
+
+f[x_,y_]:=Sin[x] * Exp[y];
+
+Print[f[t,s]];
+
+Print[f[Pi/2,0]];
+Print[ToString[f[t,s]]];
+
+Print["hallo" + x];
+
+//ii = Iterator[{1.50,"morgen"}];
+ii = Iterator[i,{i,1,4}];
+
+i=5;
+//str = ToString[i] + x + " " + "hallo";
+str = ToString[Creator[i,{i,7,20}]];
+Print[str];
+
+For[i=4, i<10, i=i+1,
+   Print["hallo"];
+   If[i==6, Print["jo"]];
+];
+
+If[5==4, Print["gut"]];
+
+
+//str = ToString[ii] + "alkjdlakjdslakjs";
+
+f[x_]:=Module[{xd},
+   xd = x * Random[];
+   Print[xd];
+   Return[If[xd<50, "Hurra", xd]];
+];
+
+Seed[134];
+
+Print[f[100]];
+Print[f[0]];
+
+Print[Random[]];
+
+Print[4-8-10];
+Print[4*10];
+Print[10/3];
+Print[Sin[Pi]];
+
+Print[i-4];
+
+Print[Table[i,{i,1,5,2}]];
+
+Print[Length[{1,2,3,4}]];
+
+Print[Range[10]];
+
+
+
+k = Length[{1,2,3,4}];
+
+Print[k];
+
+*/
