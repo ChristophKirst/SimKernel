@@ -26,7 +26,7 @@ CFLAGS = -I./include -O3
 CC_MPI     = mpic++
 CFLAGS_MPI = -DSIM_MPI -I./include -O3
 
-LDFLAGS  = -lgsl -lgslcblas -lrt -L.
+LDFLAGS  = -lgsl -lgslcblas -L.
 LDFLAGS_MPI  = $(LDFLAGS)
 
 AR=ar
@@ -38,8 +38,6 @@ ifeq ($(OS),Linux)
 LDFLAGS  += -lrt
 LDFLAGS_MPI += -lrt
 endif
-
-
 
 
 
