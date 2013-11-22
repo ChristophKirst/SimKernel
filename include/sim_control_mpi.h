@@ -201,7 +201,19 @@ public:
 
          SCM_DEBUG("Manager:", "is finished!")
       }
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
       else  // working processes
+      
       {
          SCM_DEBUG("Proc:"<<mpi_rank, "simulate()")
 
@@ -281,6 +293,7 @@ public:
                std::stringstream str;
                str << "Starting Simulation iteration: " << (sim.iteration());
                str << "/" << sim.n_iterations() << std::endl;
+               sim_send_signal(Message, iter, SIM_MPI_CNTRL);
                sim_send_message(str.str(), SIM_MPI_CNTRL);
                
                KernelT kernel;
@@ -292,6 +305,7 @@ public:
                std::stringstream str2;
                str2 << "Simulation iteration: " << (sim.iteration());
                str2 << "/" << sim.n_iterations() << " done!" << std::endl;
+               sim_send_signal(Message, iter, SIM_MPI_CNTRL);
                sim_send_message(str2.str(), SIM_MPI_CNTRL);               
             }
             catch (SimSignal& sig)

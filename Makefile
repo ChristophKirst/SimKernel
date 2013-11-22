@@ -22,16 +22,22 @@ SRC_FILES_MPI = $(SRC_FILES) src/sim_mpi.cpp
 
 # compilation settings
 CC     = g++
-CFLAGS = 
-# -O2 
+CFLAGS = -I./include -O3
 CC_MPI     = mpic++
-CFLAGS_MPI = -DSIM_MPI
+CFLAGS_MPI = -DSIM_MPI -I./include -O3
 
 LDFLAGS  = -lgsl -lgslcblas -lrt -L.
 LDFLAGS_MPI  = $(LDFLAGS)
 
 AR=ar
 ARFLAGS=rcs
+
+
+OS := $(shell uname)
+ifeq ($(OS),Linux)
+LDFLAGS  += -lrt
+LDFLAGS_MPI += -lrt
+endif
 
 
 
@@ -87,10 +93,11 @@ clean :
 
 
 # Auto genereate Dependencies
-CFLAGS += -MMD
-CFLAGS_MPI += -MMD
+CFLAGS += -MD
+CFLAGS_MPI += -MD
 
 -include $(DEPS)
 -include $(DEPS_MPI)
 
-	
+	# DO NOT DELETE
+# DO NOT DELETE
