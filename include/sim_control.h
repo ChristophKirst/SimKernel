@@ -95,7 +95,7 @@ public:
       }
 
       if (itstart <= 0 || itstart > sim.n_iterations() || itend<=0 || itend > sim.n_iterations()) {
-         io.message("Invalid iteration number!", Exit);
+         io.message("Invalid Iteration number!");
          io.close();
          return int(Exit);
       }

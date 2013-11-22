@@ -5,10 +5,6 @@
    christoph@nld.ds.mpg.de 
    Max Planck Institue for Dynamics and Self-Organisation
    HU Berlin, BCCN Göttingen & Berlin (2008)
-   
-   
-   todo: clean up / ensure correct run if more procs than iterations
-         etc...
 ************************************************************************/
 #ifndef SIM_CONTROL_MPI_H
 #define SIM_CONTROL_MPI_H
