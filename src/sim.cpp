@@ -103,6 +103,14 @@ int Sim::process()
    return proc;
 };
 
+std::string Sim::iteration_info() {
+   std::stringstream str;
+   str << (iteration()) << "/" << n_iterations();
+   return str.str();
+}
+
+
+
 #ifdef SIM_MPI
 void Sim::signal(const SimSignal& sig, const std::string& str)
 {
@@ -240,7 +248,7 @@ bool Sim::get_expr_nothrow(const ExprNameT& n, ExprPtrT& e, const SimSignal& sig
       e = scope.match(n);
       if (e == ExprNoMatchPtr())
       {
-         if (eo) err << "Cannot get value for " << n << "! Not Defined!";
+         if (eo) err << "Cannot get value for " << n << ".";
          e = ExprNullPtr();
          return false; 
       }

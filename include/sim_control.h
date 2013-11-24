@@ -106,10 +106,12 @@ public:
       {
          if (itstart <= sim.iteration() && sim.iteration() <= itend) {
             try {
+               /*
                std::stringstream str;
                str << "Starting Simulation iteration: " << (sim.iteration());
                str << "/" << sim.n_iterations() << std::endl;
                io.message(str.str());
+               */
       
                KernelT kernel;
       
@@ -117,10 +119,12 @@ public:
                kernel.execute(sim);
                kernel.finalize(sim);
 
+               /*
                std::stringstream str2;
                str2 << "Simulation iteration: " << (sim.iteration());
                str2 << "/" << sim.n_iterations() << " done!" << std::endl;
                io.message(str2.str());
+               */
             }
             catch (const SimSignal& e)
             {

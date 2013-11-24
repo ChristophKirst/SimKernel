@@ -36,7 +36,7 @@ bool Sim::get(const ExprNameT& n, T& dest, const D& def, const SimSignal& sig)
    ExprPtrT e; bool eo;
    if (!get_expr_nothrow(n, e, sig, eo))
    {
-      if (eo) err << " Using " << toExprString(def) << " instead!" << sig;
+      if (eo) err << " Using " << toExprString(def) << " instead." << sig;
       dest = def;
       return false;
    };
@@ -47,7 +47,7 @@ bool Sim::get(const ExprNameT& n, T& dest, const D& def, const SimSignal& sig)
    }
    catch (const ExpressionError& exprerr)
    {
-      if (eo) err << exprerr.what() << " Using " << toExprString(def) << " instead!" << sig;
+      if (eo) err << exprerr.what() << " Using " << toExprString(def) << " instead." << sig;
       dest = T(def);
       return false;
    };
@@ -86,6 +86,9 @@ bool Sim::expr_to_vector_nothrow(const ExprPtrT& e, std::vector<T>& l, const D& 
    {
       try
       {
+         
+         //io << *it << Endl;
+         
          T val; ExprToValue(*it, val);
          l.push_back(val);
       }
@@ -97,6 +100,7 @@ bool Sim::expr_to_vector_nothrow(const ExprPtrT& e, std::vector<T>& l, const D& 
       };
    };
    if (!succ && eo) err << "Using " << toExprString(def) << " instead!";
+
    return succ;
 };
 
@@ -137,13 +141,13 @@ bool Sim::get_matrix(const ExprNameT& name, std::vector< std::vector<T> >& l, co
       if (eo) err << name << " = " << e << " is not a matrix!" << sig;
       return false;
    };
-
+   
    l.clear();
    bool succ = true;
    for (ExprArgIteratorT it = e->arg.begin(); it != e->arg.end(); it++)
-   {
+   {      
       l.push_back(std::vector<T>());
-      if (!expr_to_vector_nothrow((*it), (*(l.end()-1)), def, eo))
+      if (!expr_to_vector_nothrow((*it), l.back(), def, eo))
          succ = false;
    };
 

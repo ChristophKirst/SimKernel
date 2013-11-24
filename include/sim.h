@@ -88,6 +88,8 @@ class Sim
 
       std::string file_extension();
       
+      std::string iteration_info();
+      
       bool init_result_file;
       bool append_data_to_result_file(std::string result_file, std::string data_file);
       

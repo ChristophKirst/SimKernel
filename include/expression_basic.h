@@ -2468,6 +2468,7 @@ std::string toExprString(const T& val)
 };
 std::string toExprString(const std::string& val);
 std::string toExprString(const char* val);
+std::string toExprString(const bool& val);
 
 template<typename T> ExprPtrT 
 ValueToExpr(const T& val)
@@ -2489,7 +2490,7 @@ template<typename T>
 std::string ExprToValueErrorDescription(const ExprPtrT& e)
 {
    std::ostringstream str; 
-   str << "Expression Error: Typemismatch:\nCannot convert: " << e;
+   str << "Expression Error: Type mismatch:\nCannot convert: " << e;
    str << " to type " << typeName<T>();
    return str.str();
 };
