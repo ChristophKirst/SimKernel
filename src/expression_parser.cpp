@@ -88,6 +88,8 @@ ExprParser::ExprParser() : result(ExprNullPtr())
    predefineFunction<ExprRandomInteger>(predefined_functions);
    predefineFunction<ExprRandom>       (predefined_functions);
    predefineFunction<ExprSeed>         (predefined_functions);
+   
+   predefineFunction<ExprHammingDistance>(predefined_functions);
 
    predefineFunction<ExprRange>        (predefined_functions);
 

@@ -87,14 +87,17 @@ public:
 
             for (int p = 1; p < mpi_size; p++)
             {
-               sim_send_signal(Success, -1, p);
+               sim_send_signal(Success, 0, p);
                sim_send_init(n_iterations, p); // initialize working processes
             };
          } 
 
          int src, it, sig;
          int done_procs = 0;
-         int iter = -1;
+         int iter = 1;
+         //sim starts counting iterations with 1 !!!
+         
+         
          bool errs = false;
 
          while (ready)
@@ -151,14 +154,14 @@ public:
             {
                SCM_DEBUG("Manager: Process: "<<src <<" job "<<it<<" done! iter=", iter)
 
-               iter++;
                // start next iteration
-               if (iter < n_iterations) 
+               if (iter <= n_iterations) 
                {
                   SCM_DEBUG("Manager: Process: "<<src <<" new job:", iter)
                   sim_send_do(iter, src);
+                  iter++;
                }
-               else 
+               else
                {
                   SCM_DEBUG("Manager: Process: "<<src <<" done! total done=", done_procs)
                   done_procs++;
@@ -171,7 +174,7 @@ public:
 
          // tell all processes to finalize
          for (int p = 1; p < mpi_size; p++)
-            sim_send_do(n_iterations, p);
+            sim_send_do(n_iterations+1, p);
 
          int final_procs = 0;
          while (final_procs < mpi_size -1)
@@ -190,21 +193,33 @@ public:
          if (ready && errs)
          {
             io.message("Simulation done!");
-            io.error_summary();
             io.message("Errors in the simulation!");
+            io.error_summary();
          }
 
          io.close();
 
          SCM_DEBUG("Manager:", "is finished!")
       }
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
       else  // working processes
+      
       {
          SCM_DEBUG("Proc:"<<mpi_rank, "simulate()")
 
          // init
          int next_iter = 0;
-         int iter = -1;
+         int iter = 0;
          int n_iterations = 0;
          int sig, it;
          int from = SIM_MPI_CNTRL;
@@ -217,7 +232,7 @@ public:
 
          SCM_DEBUG("Proc:"<<mpi_rank<<" init: n_iters=", n_iterations)
 
-         // initialization for manager process ok try if it works for this process
+         // initialization for manager process ok - try if it works for this process
 
 
          std::string err;
@@ -232,7 +247,7 @@ public:
 
          if(!ready)
          {
-            if (sig == int(Success)) // send invalid mesage if init of root pocess was succesful
+            if (sig == int(Success)) // send invalid mesage if init of root process was succesful
             {
                std::ostringstream str;
                str << "Process " << mpi_rank << " invalid: " << err;
@@ -253,7 +268,7 @@ public:
             sim_recv_do(next_iter, SIM_MPI_CNTRL);
             SCM_DEBUG("Proc:"<<mpi_rank<<" iter="<<iter<<" recieved next_iter=", next_iter)
 
-            if (next_iter >= n_iterations) break; // exit condition
+            if (next_iter > n_iterations) break; // exit condition
 
             while (iter < next_iter)
             {
@@ -275,11 +290,27 @@ public:
             SCM_DEBUG("Proc:"<<mpi_rank<<" iter="<<iter, "starting simulation!")
 
             try {
+               /*
+               std::stringstream str;
+               str << "Starting Simulation iteration: " << (sim.iteration());
+               str << "/" << sim.n_iterations() << std::endl;
+               sim_send_signal(Message, iter, SIM_MPI_CNTRL);
+               sim_send_message(str.str(), SIM_MPI_CNTRL);
+               */
+               
                KernelT kernel;
 
                kernel.initialize(sim);
                kernel.execute(sim);
                kernel.finalize(sim);
+               
+               /*
+               std::stringstream str2;
+               str2 << "Simulation iteration: " << (sim.iteration());
+               str2 << "/" << sim.n_iterations() << " done!" << std::endl;
+               sim_send_signal(Message, iter, SIM_MPI_CNTRL);
+               sim_send_message(str2.str(), SIM_MPI_CNTRL);               
+               */
             }
             catch (SimSignal& sig)
             {

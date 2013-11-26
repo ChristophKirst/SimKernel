@@ -1,0 +1,36 @@
+Todo:
+
+
+general reorganization:
+
+- improve pattern matching / kernel -> in particular make clear distinction between parser / kernel etc...
+
+
+
+- have different scopes that are evaluated at different stages of the iteraton process:
+      i.e. Init`  -> evaluated at first init form master process
+           InitIter` -> evaluated at initialization of next iteration
+           EndIter` -> at end of iteration 
+           End` -> at end of full simulation
+
+         -> this allows for iteration dependent extra output via Print[] or other routines
+         -> with filemanagement routines this allows for combining files at the end of simulation etc...
+           
+- result dependent choice of next iteration 
+           via NextIteration` scope 
+            -> which can be set by default to IncreaseIteration
+   -> it is no longer clear how many iterations we have !! -> so take care about this too !!!
+
+
+
+- features:
+
+   - file manipulation expressions, file joins 
+   - CMMFile interface -> maybe have a join command for joining binaryfiles to a larger one ? -> need file end identifier !!
+         -> should work
+   - include header files / Include["aasdad"]  
+
+
+
+-> probably requires a larger rewrite !!!
+

@@ -16,3 +16,7 @@ EXPR_NAME_IMPL(ExprRandomInteger, "RandomInteger")
 EXPR_NAME_IMPL(ExprSeed,   "Seed")
 
 EXPR_NAME_IMPL(ExprRange,   "Range")
+
+
+EXPR_NAME_IMPL(ExprHammingDistance, "HammingDistance")
+

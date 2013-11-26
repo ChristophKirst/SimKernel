@@ -120,8 +120,9 @@ std::string toExprString(const std::string& c)
 
 std::string toExprString(const bool& val)
 {
-  return (val ? std::string("True") : std::string("False"));
+   return (val ? std::string("True") : std::string("False"));
 };
+
 
 template<> std::string typeName<double>() { return std::string("double"); };
 

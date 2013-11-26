@@ -76,7 +76,7 @@ class Sim
       bool next_iteration();
       int  n_iterations();
       int  iteration();
-
+      
       int  process();
 
       // signalling
@@ -87,7 +87,12 @@ class Sim
       std::string info();
 
       std::string file_extension();
-
+      
+      std::string iteration_info();
+      
+      bool init_result_file;
+      bool append_data_to_result_file(std::string result_file, std::string data_file);
+      
 
    public:
       bool defined(const ExprNameT& name);

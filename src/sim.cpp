@@ -14,12 +14,14 @@
 #include "sim_mpi.h"
 #endif
 
-Sim::Sim() :  io(this), err(this), msg(this), global(ExprNullPtr()), proc(-1), iter(-1), n_iters(0)
+#include <fstream>
+
+Sim::Sim() :  io(this), err(this), msg(this), global(ExprNullPtr()), proc(-1), iter(-1), n_iters(0), init_result_file(true)
 {
    SIM_DEBUG("Sim::creator() global=", global<< " proc =" << proc << " global.ptr=" << global.ptr )
 };
 
-Sim::Sim(const ExprPtrT& g) : io(this), err(this), msg(this), global(g), proc(-1), iter(-1), n_iters(0)
+Sim::Sim(const ExprPtrT& g) : io(this), err(this), msg(this), global(g), proc(-1), iter(-1), n_iters(0), init_result_file(true)
 {
 };
 
@@ -42,7 +44,9 @@ bool Sim::init(const ExprPtrT& g, std::string& err, int p)
    global = g;
    proc = p;
    iter = 0;
-
+   
+   init_result_file = true;
+   
    try 
    {
       global->evaluate(&scope);
@@ -98,6 +102,14 @@ int Sim::process()
 {
    return proc;
 };
+
+std::string Sim::iteration_info() {
+   std::stringstream str;
+   str << (iteration()) << "/" << n_iterations();
+   return str.str();
+}
+
+
 
 #ifdef SIM_MPI
 void Sim::signal(const SimSignal& sig, const std::string& str)
@@ -226,7 +238,7 @@ bool Sim::define(const ExprNameT& name, const ExprPtrT& expr)
 // private member functions
 
 
-// inline
+inline
 bool Sim::get_expr_nothrow(const ExprNameT& n, ExprPtrT& e, const SimSignal& sig, bool& eo)
 {
    eo = is_io_signal(sig);
@@ -260,6 +272,38 @@ std::string  Sim::file_extension()
    str << iteration();
    return std::string(".") + str.str();
 };
+
+
+bool Sim::append_data_to_result_file(std::string result_file, std::string data_file) {
+   
+   std::ofstream res;
+   if (init_result_file) {
+      res.open(result_file.c_str(), std::ios::out | std::ios_base::binary);
+      init_result_file = false;
+   } else {
+      res.open(result_file.c_str(), std::ios_base::app | std::ios_base::binary);       
+   }
+  
+   std::ifstream dat(data_file.c_str(), std::ios_base::binary);
+   std::streampos pos = dat.tellg();
+   dat.seekg(0, std::ios_base::end);
+   std::streampos end = dat.tellg();
+   dat.seekg(pos, std::ios_base::beg);
+   std::size_t size = ((end-pos)/sizeof(char));
+   
+   char *contents = new char[size];
+
+   dat.read(contents, size);
+   res.write(contents, size);
+
+   delete[] contents;
+   dat.close();
+   res.close();
+
+   return true;
+};
+
+
 
 
 

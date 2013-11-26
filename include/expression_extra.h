@@ -11,6 +11,16 @@
 #include <typeinfo>
 #include <string>
 #include <fstream>
+
+#include <time.h>
+#include <sys/time.h>
+
+//Mac Os does not have clock_gettime
+#ifdef __MACH__
+#include <mach/clock.h>
+#include <mach/mach.h>
+#endif
+
 //#include <gsl/gsl_rng.h>
 
 #include "expression.h"
@@ -311,20 +321,48 @@ class ExprSeed : public Expression
       ExprPtrT evaluate(ExprScopeT* scope)
       {
          EXPR_EVAL_CHECK_SYNTAX()
+         
+         if (nargs() == 0) { 
 
-         ExprPtrT seed = arg[0]->evaluate(scope);
+           timespec ts;
+            
+           #ifdef __MACH__ // OS X does not have clock_gettime, use clock_get_time
+           clock_serv_t cclock;
+           mach_timespec_t mts;
+           host_get_clock_service(mach_host_self(), CALENDAR_CLOCK, &cclock);
+           clock_get_time(cclock, &mts);
+           mach_port_deallocate(mach_task_self(), cclock);
+           ts.tv_sec = mts.tv_sec;
+           ts.tv_nsec = mts.tv_nsec;
 
-         EXPR_EVAL_ASSERT(seed->integerQ() , RandomSeedNotInteger, this)
+           #else
+           
+            // random initialization with time !!!
+            //srand ( time(NULL) );            
+            //srand( clock() );
+            //timespec ts;
+            clock_gettime(CLOCK_REALTIME, &ts);
+            //std::cout << "Seed time: " << ts.tv_nsec << std::endl;
+            
+            #endif
+            
+            srand( ts.tv_nsec );
+            
+         } else { //nargs ==1
+            ExprPtrT seed = arg[0]->evaluate(scope);
 
-         //gsl_rng_set(ExprRandom::random, int(*seed));
-         srand(int(*seed));
+            EXPR_EVAL_ASSERT(seed->integerQ() , RandomSeedNotInteger, this)
+
+            //gsl_rng_set(ExprRandom::random, int(*seed));
+            srand(int(*seed));
+         }
 
          return ExprNullPtr();
       };
 
       ExprSyntaxErrorT check_syntax() const
       {
-         if (nargs() != 1) return IllegalArgumentNumber;
+         if (!(nargs() == 0 || nargs() ==1)) return IllegalArgumentNumber;
          else return NoSyntaxError;
       };
 };
@@ -451,6 +489,95 @@ class ExprRange : public Expression
          else return NoSyntaxError;
       };
 };
+
+
+
+
+/*****************************************************************************
+
+Special Functions 
+
+*****************************************************************************/
+
+class ExprHammingDistance : public Expression
+{
+public: 
+   ExprHammingDistance() : Expression() {};
+   
+   ExprHammingDistance(const ExprPtrT& x, const ExprPtrT& y) : Expression(x,y)
+   {};
+   
+public: 
+   EXPR_NAME_DECL()
+   
+   ExprPtrT evaluate(ExprScopeT* scope)
+   {
+      EXPR_EVAL_CHECK_SYNTAX()
+      
+      ExprPtrT x = arg[0]->evaluate(scope);
+      ExprPtrT y = arg[1]->evaluate(scope);
+      if (x->numberQ() && y->numberQ())
+      {
+         int ix = int(*x);
+         int iy = int(*y);
+         
+         return ExprPtrT(new ExprInteger(hamming_dist(ix,iy)));
+      };
+      if (x == arg[0] && y == arg[1]) return ExprPtrT(this);
+      return ExprPtrT(new ExprHammingDistance(x,y));
+   };
+   
+   bool toTypeQ(const std::type_info& ti) const 
+   { 
+      return (  ti == typeid(int) 
+      || ti == typeid(double) 
+      || ti == typeid(bool)
+      );
+   };
+   
+   operator double () const 
+   {
+      return int(*this);
+   };
+   
+   operator int () const
+   {
+      if (nargs() == 0) return rand();
+      EXPR_EVAL_ASSERT( arg[0]->numberQ() && arg[1]->numberQ(), NonNumberToIntg, this)
+      int x = int(*arg[0]);
+      int y = int(*arg[1]);
+      return hamming_dist(x,y);
+      
+      //is this necessary ?
+   };
+
+   operator bool () const
+   {
+      return true;
+   };
+   
+   bool numberQ() { return true; };
+   bool integerQ(){ return true; };
+   bool realQ()   { return true; };
+   
+   ExprSyntaxErrorT check_syntax() const
+   {
+      if (nargs() != 2) return IllegalArgumentNumber;
+      else return NoSyntaxError;
+   };
+   
+   inline int hamming_dist(const int& x, const int& y) const
+   {
+      int dist = 0;
+      unsigned int val = x ^ y;
+      while(val) {
+         ++dist;
+         val &= val-1;
+      }
+      return dist;
+   }
+};
+
 
 
 

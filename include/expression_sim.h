@@ -196,24 +196,24 @@ class ExprIterator : public Expression
       ExprPtrT value;             // value of iterated variable or list
       ExprIndexT list_step;       // actual position in list
 
-      enum IteratorStatusT {Ndef = 0,  // initial initialization of kernel
+      enum IteratorStatusT {Ndef = 0,   // initial initialization of kernel
                                         // retrun unevaluated pointer to this Iterator 
                                         // -> all non-iterated parameter are now defined
                                         // -> iterator symbols are defined as ExprIterator
-                             Init,      // init() sets status to Init and evaluates all
+                            Init,       // init() sets status to Init and evaluates all
                                         // iterators then status is set to First
                                         // -> automatic dependency ordering (assert no loops !)
                                         // -> value, end, delta or list are set (assert this prop)
-                             Defd,      // init is done (exclude reevaluation by second symbol ref)
+                            Defd,       // init is done (exclude reevaluation by second symbol ref)
                                         // -> returns unevaluated pointer to this Iterator
-                             Eval,      // Iterator is evaluated -> to exclude loop dependencies !
-                             Done,      // return actual iteration values !
+                            Eval,       // Iterator is evaluated -> to exclude loop dependencies !
+                            Done,       // return actual iteration values !
                                         // 
                                         // usage: 
                                         // rootkernel->evaluate(scope)
                                         // ExprIterator::init(scope); ??
                                         // while (ExprIterator::next_iteration(scope)) { ... };
-                             };
+                            };
 
       IteratorStatusT status;
 
@@ -239,6 +239,17 @@ class ExprIterator : public Expression
          count = -1;
       };
 
+      // Iterator[s,e,d]  (works as Table)
+      ExprIterator(const ExprPtrT& s, const ExprPtrT& e, const ExprPtrT& d) 
+      : Expression(s,e,d),  status(Ndef),
+        value(ExprNullPtr()), list(ExprNullPtr()), list_step(0),
+        step(ExprNullPtr()), end(ExprNullPtr()), delta(ExprNullPtr())
+      {
+         id = iterators.size();
+         iterators.push_back(ExprPtrT(this));
+         count = -1;
+      };
+      
       // Iterator[expr, {i,s,e,d}]  (works as Table)
       ExprIterator(const ExprPtrT& b, const ExprPtrT& it) 
       : Expression(b, it),  status(Ndef),
@@ -294,7 +305,7 @@ class ExprIterator : public Expression
          EXPR_SIM_DEBUG("Iterator: next_iteration", count)
          count++;
          level = 0;
-         //no iterators -> iterate once 
+         // no iterators -> iterate once 
          if (iterators.size() == 0)
          {
             if (count == 0)
@@ -336,7 +347,7 @@ class ExprIterator : public Expression
             value = list->arg[list_step];
             return true;
 
-         } else { // nargs() == 2:  start, end, delta iterator
+         } else if (nargs() == 2) { // expr, {i, start, end, delta} iterator
 
             bool next = false;
 
@@ -374,6 +385,40 @@ class ExprIterator : public Expression
             scope->pop();
             status = Done;
             return true;
+            
+         } else if (nargs() == 3) {// start, end , delta
+      
+            bool next = false;
+                      
+            if (step->integerQ() && delta->integerQ())
+            {
+               int s = int(*step) + int(*delta);
+               step = ExprPtrT(new ExprInteger(s));
+               next = (s > int(*end));
+            } else {
+               double s = double(*step) + double(*delta);
+               step = ExprPtrT(new ExprReal(s));
+               next = (s > double(*end));
+            };
+            
+            if (next)
+            {
+               level++;
+               if (level > iterators.size()) return false;
+               if (!((ExprIterator*)(iterators[ordering[level]].get()))->increase_iteration(scope))
+                  return false;
+
+               // initialize the iterator anew
+               status = Eval;
+               step = arg[0]->evaluate(scope);
+               end = arg[1]->evaluate(scope);
+               delta = arg[2]->evaluate(scope);
+               EXPR_EVAL_ASSERT(step->numberQ() && end->numberQ() && delta->numberQ(), IteratorExpectNumber, this)
+               status = Done;
+            };
+            
+            value = step;
+            return true;        
          };
       };
 
@@ -400,7 +445,7 @@ class ExprIterator : public Expression
                EXPR_EVAL_ASSERT(list->listQ() && list->nargs()>0, IteratorExpectList, this);
                value = list->arg[0]->evaluate(scope);
                status = Defd;
-            } else { // nargs() == 2  // start, end, delta iterator
+            } else if (nargs() == 2) {  // expr, {i, start, end, delta} iterator
                status = Eval;
                step = arg[1]->arg[1]->evaluate(scope);
                end = arg[1]->arg[2]->evaluate(scope);
@@ -414,7 +459,16 @@ class ExprIterator : public Expression
                scope->pop();
                status = Defd;
 
-            };
+            } else { // nargs() ==3  // start, end , delta
+               status = Eval;
+               step = arg[0]->evaluate(scope);
+               end = arg[1]->evaluate(scope);
+               delta = arg[2]->evaluate(scope);
+
+               EXPR_EVAL_ASSERT(step->numberQ() && end->numberQ() && delta->numberQ(), IteratorExpectNumber, this)
+               value = step;
+               status = Defd;               
+            }
 
             // automatic dependency ordering
             ordering.push_front(id);
@@ -435,7 +489,9 @@ class ExprIterator : public Expression
             if (!(arg[1]->listQ() && (arg[1]->nargs() == 4 || arg[1]->nargs()==3))) return IteratorExpectIterationList;
             if (!(arg[1]->arg[0]->symbolQ())) return IteratorExpectSymbol;
             return NoSyntaxError;
-         };
+         }
+         if (nargs() == 3) return NoSyntaxError;
+         
          return IteratorSyntaxError;
       };
 

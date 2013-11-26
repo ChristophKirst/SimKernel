@@ -68,7 +68,7 @@ public:
          io.close();
          return int(Exit);
       };
-
+      
       io.set_iterations(sim.n_iterations());
 
       long itstart = 1;
@@ -77,6 +77,7 @@ public:
       {
          if (strcmp(argv[2], "iterations")==0) {  // return number of iterations to stdout
             std::cout << sim.n_iterations() << std::endl;
+            io.close();
             return int(Success);
          } else {
             std::stringstream str(argv[2]);
@@ -105,10 +106,12 @@ public:
       {
          if (itstart <= sim.iteration() && sim.iteration() <= itend) {
             try {
+               /*
                std::stringstream str;
                str << "Starting Simulation iteration: " << (sim.iteration());
                str << "/" << sim.n_iterations() << std::endl;
                io.message(str.str());
+               */
       
                KernelT kernel;
       
@@ -116,10 +119,12 @@ public:
                kernel.execute(sim);
                kernel.finalize(sim);
 
+               /*
                std::stringstream str2;
                str2 << "Simulation iteration: " << (sim.iteration());
                str2 << "/" << sim.n_iterations() << " done!" << std::endl;
                io.message(str2.str());
+               */
             }
             catch (const SimSignal& e)
             {
