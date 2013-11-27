@@ -69,9 +69,6 @@ typedef int                            ExprStatusT;
 
 typedef std::string                    ExprNameT;
 typedef unsigned int                   ExprIndexT;
-typedef std::deque<ExprPtrT>           ExprArgT;
-typedef ExprArgT::iterator             ExprArgIteratorT;
-typedef ExprArgT::const_iterator       ExprArgConstIteratorT;
 
 enum ExprEvalErrorT
                { 
@@ -160,6 +157,50 @@ typedef std::map<ExprSyntaxErrorT, std::string>  ExprSyntaxErrorDescriptionT;
 std::string ExprEvalErrorDescription(const ExprEvalErrorT& e);
 std::string ExprSyntaxErrorDescription(const ExprSyntaxErrorT& e);
 
+// Moved here to avoid forward declarations of ExpressionPtr involving the stl
+
+/*********************************************************************************
+
+   Expression Pointer
+
+**********************************************************************************/
+
+class ExpressionPtr
+{
+public:
+
+   Expression*   ptr;
+
+   explicit ExpressionPtr();
+   explicit ExpressionPtr(Expression* e);
+   ~ExpressionPtr();
+
+   ExpressionPtr(const ExpressionPtr& r);
+
+   Expression* get();
+   Expression* get() const;
+
+   Expression* operator -> ();
+   Expression* operator -> () const;
+   Expression& operator * ();
+   Expression& operator * () const;
+
+   ExpressionPtr& operator = (const ExpressionPtr& rhs);
+   ExpressionPtr& operator = (Expression* e);
+
+   // equality of pointers !
+   bool operator == (const ExpressionPtr& rhs) const;
+   bool operator == (Expression* rhs) const;
+   bool operator != (const ExpressionPtr& rhs) const;
+
+   // Pattern ordering for ExpressionScope
+   bool operator < (const ExpressionPtr& rhs) const;
+};
+
+typedef std::deque<ExprPtrT>           ExprArgT;
+typedef ExprArgT::iterator             ExprArgIteratorT;
+typedef ExprArgT::const_iterator       ExprArgConstIteratorT;
+
 /*********************************************************************************
 
    Base Class Expression 
@@ -245,44 +286,6 @@ class Expression
       virtual ExprNameT symbolname() const;
 };
 
-
-/*********************************************************************************
-
-   Expression Pointer
-
-**********************************************************************************/
-
-class ExpressionPtr
-{
-public:
-
-   Expression*   ptr;
-
-   explicit ExpressionPtr();
-   explicit ExpressionPtr(Expression* e);
-   ~ExpressionPtr();
-
-   ExpressionPtr(const ExpressionPtr& r);
-
-   Expression* get();
-   Expression* get() const;
-
-   Expression* operator -> ();
-   Expression* operator -> () const;
-   Expression& operator * ();
-   Expression& operator * () const;
-
-   ExpressionPtr& operator = (const ExpressionPtr& rhs);
-   ExpressionPtr& operator = (Expression* e);
-
-   // equality of pointers !
-   bool operator == (const ExpressionPtr& rhs) const;
-   bool operator == (Expression* rhs) const;
-   bool operator != (const ExpressionPtr& rhs) const;
-
-   // Pattern ordering for ExpressionScope
-   bool operator < (const ExpressionPtr& rhs) const;
-};
 
 /*********************************************************************************
 
