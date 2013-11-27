@@ -91,6 +91,8 @@ clean :
 	rm -f $(OBJS) $(OBJS_MPI) $(EXE_OBJ) $(EXE_OBJ_MPI) $(EXE_DEP) $(EXE_DEP_MPI) $(DEPS) $(DEPS_MPI)
 	rm -f *~ src/*~ $(EXE) $(EXE_MPI) $(LIB).a $(LIB_MPI).a
 
+tutorial_sim_iterated: $(OBJBASE) tutorial/hello_world_sim_iterated.cpp
+	$(CC) $(CFLAGS) tutorial/hello_world_sim_iterated.cpp $(OBJBASE) -o tutorial_sim_iterated $(LDFLAGS)
 
 # Auto genereate Dependencies
 CFLAGS += -MD
@@ -99,5 +101,4 @@ CFLAGS_MPI += -MD
 -include $(DEPS)
 -include $(DEPS_MPI)
 
-	# DO NOT DELETE
 # DO NOT DELETE

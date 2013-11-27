@@ -25,21 +25,18 @@ Say you have program like this:
 using namespace std;
 
 int main(void) {
-  cout <<"Chunky bacon!"<<endl;
+  cout <<"Hello world!"<<endl;
   
   return 0;
 }
 ```
 
-The output is, of course: `Chunky bacon!`
+The output is, of course: `Hello world!`
 
 But now you decide that you need a more flexible version of this program, so you wrap it as a SimKernel class like this:
 
 ```c++
-#include <iostream>
 #include "../sim_main.h"
-
-using namespace std;
 
 class Kernel;
 
@@ -53,24 +50,23 @@ int main(int argc, char* argv[])
 class Kernel
 {
 public:
-  void initialize(Sim& sim) {
-  };
+  void initialize(Sim& sim) {};
   
   void execute(Sim& sim) {
-    cout <<"Hello World!"<<endl;
+    sim.io <<"Hello World!"<<Endl;
   };
   
-  void finalize(Sim& sim) {
-  };
+  void finalize(Sim& sim) {};
 };
 ```
 
-Note that this file is included in the repository as `tutorial/hello_world_sim.cpp`, which you can build by calling `make tutorial_sim`. When executing, it requires a control file as parameter, but for now, any empty file will do. Just create one, and run `./tutorial_sim empty_control_file.txt`.
+Note that this file is included in the repository as `tutorial/hello_world_sim.cpp`, which you can build by calling `make tutorial_sim`. When executing, it requires a control file as parameter, but for now, any empty file will do. To run the program, type `./tutorial_sim tutorial/empty_control_file.txt`.
 
 The output is, slightly more verbose than our original version:
 
 ```
-Hello World!
+Sim: Starting Simulation iteration: 1/1
+Sim: It 1: Hello World!
 Sim: Simulation iteration: 1/1 done!
 Sim: Simulation done!
 Sim: 
@@ -88,17 +84,18 @@ public:
   string greeting, name;
   void initialize(Sim& sim) {
     sim.get("greeting",greeting,"Hello");
-    sim.get("name",name,"World");
+    sim.get("name",name);
   };
   
   void execute(Sim& sim) {
-    cout <<greeting<<" "<<name<<"!"<<endl;
+    sim.io <<greeting<<" "<<name<<"!"<<Endl;
   };
   
-  void finalize(Sim& sim) {
-  };
+  void finalize(Sim& sim) {};
 };
 ```
+
+This file is available at `tutorial/hello_world_sim_iterated.cpp`, and after you have compiled it by typing `make tutorial_sim_iterated`.
 
 Note: The third parameter of `sim.get`, where we supply default values in case a variable is not listed in the respective control file. If we do not supply a default value and the variable is not found in the control file, the program will exit with an error message.
 
@@ -113,17 +110,17 @@ whichone = Iterator[j,{j,0,Length[people]-1,1}];
 name = people[[whichone]];
 ```
 
-That's it! Now if we run `./tutorial_sim tutorial/control_file.txt`, we get the following result:
+That's it! Now if we run `./tutorial_sim_iterated tutorial/control_file.txt`, we get the following result:
 
 ```
 Sim: Starting Simulation iteration: 1/3
-Hello Alice!
+Sim: It 1: Hello Alice!
 Sim: Simulation iteration: 1/3 done!
 Sim: Starting Simulation iteration: 2/3
-Hello Bob!
+Sim: It 2: Hello Bob!
 Sim: Simulation iteration: 2/3 done!
 Sim: Starting Simulation iteration: 3/3
-Hello Peter!
+Sim: It 3: Hello Peter!
 Sim: Simulation iteration: 3/3 done!
 Sim: Simulation done!
 Sim: 
@@ -132,8 +129,8 @@ Sim: No errors!
 Sim: Bye!
 ```
 
-We believe you can see where this is going. Just paste the code you originally had into the `execute` method. Then use the medod `intialize` to load parameters from the control file, and use `finalize` to save results or to deallocate memory.
+We believe you can see where this is going. Just paste the code you originally had into the `execute` method. Then use the method `intialize` to load parameters from the control file, and use `finalize` to save results or to deallocate memory.
 
-If you have ever worked with simulations or any other program that has lots of parameters, is is enough to keep track of your control files to remember or repeat what you have been doing.
+If you have ever worked with simulations or any other program that has lots of parameters, you might see how this can save a lot of time because all you need to do to understand or repeat later what you have been doing is  to keep track of your control files.
 
 If you have any questions, feature requests or bug reports, feel free to use the Issues tab above.

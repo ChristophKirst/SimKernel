@@ -1,3 +1,4 @@
+#include <string>
 #include "../sim_main.h"
 
 class Kernel;
@@ -12,10 +13,14 @@ int main(int argc, char* argv[])
 class Kernel
 {
 public:
-  void initialize(Sim& sim) {};
+  string greeting, name;
+  void initialize(Sim& sim) {
+    sim.get("greeting",greeting,"Hello");
+    sim.get("name",name);
+  };
   
   void execute(Sim& sim) {
-    sim.io <<"Hello World!"<<Endl;
+    sim.io <<greeting<<" "<<name<<"!"<<Endl;
   };
   
   void finalize(Sim& sim) {};
