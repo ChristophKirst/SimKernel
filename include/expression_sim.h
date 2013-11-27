@@ -420,6 +420,7 @@ class ExprIterator : public Expression
             value = step;
             return true;        
          };
+         return false;
       };
 
    public:
