@@ -89,6 +89,17 @@ clean :
 	rm -f $(OBJS) $(OBJS_MPI) $(EXE_OBJ) $(EXE_OBJ_MPI) $(DEPS) $(DEPS_MPI)
 	rm -f *~ src/*~ $(TEST) $(TEST_MPI) $(LIB).a $(LIB_MPI).a
 
+PREFIX = /usr/local
+
+.PHONY : install
+install: lib
+	mkdir -p /usr/local/lib
+	install -m 0644 lib/sim.a /usr/local/lib/libsim.a
+	mkdir -p /usr/local/include/sim
+	install -m 0644 include/* /usr/local/include/sim/
+
+tutorial_sim_iterated: $(OBJBASE) tutorial/hello_world_sim_iterated.cpp
+	$(CC) $(CFLAGS) tutorial/hello_world_sim_iterated.cpp $(OBJBASE) -o tutorial_sim_iterated $(LDFLAGS)
 
 # Auto genereate Dependencies
 CFLAGS += -MD
@@ -97,5 +108,4 @@ CFLAGS_MPI += -MD
 -include $(DEPS)
 -include $(DEPS_MPI)
 
-	# DO NOT DELETE
 # DO NOT DELETE

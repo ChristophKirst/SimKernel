@@ -13,8 +13,9 @@ bool Sim::get(const ExprNameT& n, T& dest, const SimSignal& sig)
    ExprPtrT e; bool eo;
    if (!get_expr_nothrow(n, e, sig, eo))
    {
-      if (eo) err /*<< " Parameter " << n << " not set!"*/ <<sig;
-      return false;
+      if (eo) err << " Parameter " << n << " not set! Aborting." <<sig;
+      // return false;
+      exit(1);
    };
 
    try
@@ -23,8 +24,9 @@ bool Sim::get(const ExprNameT& n, T& dest, const SimSignal& sig)
    }
    catch (const ExpressionError& exprerr)
    {
-      if (eo) err << exprerr.what() /*<< " Parameter " << n << " not set!"*/ << sig;
-      return false;
+      if (eo) err << exprerr.what() << " Parameter " << n << " not set! Aborting." << sig;
+      // return false;
+      exit(1);
    };
 
    return true;
