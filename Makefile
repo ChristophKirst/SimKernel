@@ -48,6 +48,8 @@ OBJS_MPI = $(patsubst src/%.cpp,mpi/%.o,$(SRC_FILES_MPI))
 
 EXE_OBJ = $(patsubst %.cpp,%.o,$(EXE_SRC))
 EXE_OBJ_MPI = $(patsubst %.cpp, %_mpi.o,$(EXE_SRC))
+EXE_DEP = $(patsubst %.cpp,%.d,$(EXE_SRC))
+EXE_DEP_MPI = $(patsubst %.cpp, %_mpi.d,$(EXE_SRC))
 
 DEPS = $(patsubst src/%.cpp,obj/%.d,$(SRC_FILES))
 DEPS_MPI = $(patsubst src/%.cpp,mpi/%.d,$(SRC_FILES_MPI))
@@ -86,8 +88,8 @@ mpi/%.o : src/%.cpp
 	
 .PHONY : clean
 clean :
-	rm -f $(OBJS) $(OBJS_MPI) $(EXE_OBJ) $(EXE_OBJ_MPI) $(DEPS) $(DEPS_MPI)
-	rm -f *~ src/*~ $(TEST) $(TEST_MPI) $(LIB).a $(LIB_MPI).a
+	rm -f $(OBJS) $(OBJS_MPI) $(EXE_OBJ) $(EXE_OBJ_MPI) $(EXE_DEP) $(EXE_DEP_MPI) $(DEPS) $(DEPS_MPI)
+	rm -f *~ src/*~ $(EXE) $(EXE_MPI) $(LIB).a $(LIB_MPI).a
 
 PREFIX = /usr/local
 

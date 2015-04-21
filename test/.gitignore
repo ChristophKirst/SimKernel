@@ -1,0 +1,5 @@
+*.d
+*.o
+
+test
+test_mpi

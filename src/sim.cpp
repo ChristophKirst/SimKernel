@@ -238,7 +238,6 @@ bool Sim::define(const ExprNameT& name, const ExprPtrT& expr)
 // private member functions
 
 
-inline
 bool Sim::get_expr_nothrow(const ExprNameT& n, ExprPtrT& e, const SimSignal& sig, bool& eo)
 {
    eo = is_io_signal(sig);
